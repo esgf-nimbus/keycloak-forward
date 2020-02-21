@@ -1,0 +1,33 @@
+package:
+  name: keycloak-forward
+  version: 0.1.0
+
+source:
+  path: .
+
+build:
+  number: 0
+  noarch: python
+  script: "{{ PYTHON}} -m pip install . --no-deps -vv"
+
+requirements:
+  host:
+    - python
+    - pip
+
+  run:
+    - python
+    - flask
+    - flask-sqlalchemy
+    - authlib
+    - gunicorn
+    - tabulate
+
+tests:
+  import:
+    - keycloak_forward
+    - keycloak_forward
+
+about:
+  home: https://github.com/esgf-nimbus/keycloak-forward
+  summary: Forward authentication server for Traefik using Keycloak
