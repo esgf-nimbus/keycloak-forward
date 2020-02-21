@@ -29,10 +29,10 @@ def forward(mocker):
     app.config['TESTING'] = True
 
     app.config.update(
-        CLIENT_ID = '<CLIENT_ID>',
-        CLIENT_SECRET = '<CLIENT_SECRET>',
-        SCOPE = 'openid roles groups',
-        REDIRECT_URI = 'https://localhost/callback',
+        KEYCLOAK_CLIENT_ID = '<CLIENT_ID>',
+        KEYCLOAK_CLIENT_SECRET = '<CLIENT_SECRET>',
+        KEYCLOAK_SCOPE = 'openid roles groups',
+        KEYCLOAK_REDIRECT_URI = 'https://localhost/callback',
         KEYCLOAK_DISCOVERY_URL = 'http://httpbin.org/status/200',
     )
 
@@ -114,14 +114,14 @@ def test_redirect_or_forward_success(forward, mocker):
 
     mocker.patch.object(forward, 'get_client_id', return_value=0)
 
-    entry = forward.auth_request(id=0, origin='http://localhost/wps', allowed=True, roles='', groups='')
+    entry = forward.auth_request(id=0, origin='http://localhost/wps', allowed=True, roles='', groups='', upstream_headers='{}')
 
     forward.db.session.add(entry)
     forward.db.session.commit()
 
     output = forward.redirect_or_forward({}, header, args)
 
-    assert output == ('Success', 200)
+    assert isinstance(output, Response)
 
 def test_redirect_or_forward(forward, mocker):
     header = {
