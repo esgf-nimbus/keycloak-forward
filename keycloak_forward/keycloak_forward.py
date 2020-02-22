@@ -16,6 +16,16 @@ from flask_sqlalchemy import SQLAlchemy
 from keycloak_forward.utils import keycloak_discover
 from keycloak_forward.utils import keycloak_jwk
 
+CONFIG_KEYS = (
+    'KEYCLOAK_CLIENT_ID',
+    'KEYCLOAK_CLIENT_SECRET',
+    'KEYCLOAK_DISCOVERY_URL',
+    'KEYCLOAK_SCOPE',
+    'KEYCLOAK_REDIRECT_URI',
+    'KEYCLOAK_UPSTREAM_HEADERS',
+    'SECRET_KEY',
+)
+
 class KeyCloakForward(object):
     def __init__(self, app=None):
         self.app = app
@@ -31,6 +41,10 @@ class KeyCloakForward(object):
 
         if 'KEYCLOAK_FORWARD_CONFIG' in os.environ:
             app.config.from_envvar('KEYCLOAK_FORWARD_CONFIG')
+
+        for x in CONFIG_KEYS:
+            if x in os.environ:
+                app.config.update(**{x: os.environ[x]})
 
         app.logger.info('Bootstrapping keycloak openid configuration')
 
