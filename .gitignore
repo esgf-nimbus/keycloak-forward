@@ -5,6 +5,7 @@ __pycache__/
 
 config.cfg
 cache/
+docker.tar
 
 # C extensions
 *.so

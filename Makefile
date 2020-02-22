@@ -12,6 +12,7 @@ OUTPUT := --output type=image,name=$(IMAGE_NAME):$(VERSION),push=true
 else
 EXPORT_CACHE := --export-cache type=local,dest=./cache
 IMPORT_CACHE := --import-cache type=local,src=./cache
+OUTPUT := --output type=docker,name=$(IMAGE_NAME):$(VERSION),dest=/src/docker.tar
 endif
 
 helm-clean:
@@ -30,6 +31,10 @@ build:
 		--entrypoint /bin/sh \
 		moby/buildkit:master \
 		build.sh $(EXPORT_CACHE) $(IMPORT_CACHE) $(OUTPUT)
+
+ifeq ($(GIT_BRANCH),devel)
+	cat docker.tar | docker load
+endif
 
 buildkit:
 	build.sh $(EXPORT_CACHE) $(IMPORT_CACHE) $(OUTPUT)
