@@ -16,6 +16,10 @@ def create_app(test_config=None):
 
     keycloak = keycloak_forward.KeyCloakForward(app)
 
+    @app.route('/health')
+    def health():
+        return ('Ping', 200)
+
     @app.route('/keycloak')
     def keycloak_entry():
         if keycloak.is_token_bearer(request.headers):
