@@ -27,6 +27,10 @@ spec:
           image: "{{ .Values.image.repository }}:{{ .Chart.AppVersion }}"
           imagePullPolicy: {{ .Values.image.pullPolicy }}
           env:
+          {{- with .Values.prefixURL }}
+            - name: KEYCLOAK_URL_PREFIX
+              value: {{ . }}
+          {{- end }}
             - name: KEYCLOAK_FORWARD_CONFIG
               value: /etc/keycloak/keycloak.cfg
             - name: KEYCLOAK_CLIENT_ID
@@ -50,11 +54,11 @@ spec:
               protocol: TCP
           livenessProbe:
             httpGet:
-              path: /health
+              path: {{ .Values.prefixURL | default "" }}/health
               port: http
           readinessProbe:
             httpGet:
-              path: /health
+              path: {{ .Values.prefixURL | default "" }}/health
               port: http
           resources:
             {{- toYaml .Values.resources | nindent 12 }}
