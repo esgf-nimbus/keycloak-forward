@@ -1,6 +1,6 @@
 .PHONY: build-kit build bump helm helm-clean
 
-VERSION := 0.1.1
+VERSION := 0.1.2
 GIT_BRANCH := $(shell git rev-parse --abbrev-ref HEAD)
 GIT_COMMIT := $(shell git rev-parse --short HEAD)
 IMAGE_NAME := $(if $(REGISTRY),$(REGISTRY)/,)keycloak-forward
